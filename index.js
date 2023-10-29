@@ -29,12 +29,33 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
+
+
+    const productCollection =client.db("productDB").collection("products");
+
+    
+    app.get("/products", async(req, res) => {
+        const cursor = productCollection.find()
+        const result =  await cursor.toArray()
+        res.send(result);
+      });
+
+      app.post("/products", async (req, res) => {
+        const newProduct = req.body;
+        console.log(newProduct)
+        const result = await productCollection.insertOne(newProduct);
+        res.send(result);
+      });
+  
+
+
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
-    await client.close();
+    // await client.close();
   }
 }
 run().catch(console.dir);
@@ -43,9 +64,19 @@ run().catch(console.dir);
 
 
 // =================================================================
+
+// const products = [
+//     {"name":"iphone13", "brand":"apple", "type":"phone", "price":"100000", "description": "black silicon" , "rating":"5", "photo":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkOB6IMj03xxd4kuAiGkHtwDYOtfLW1d6Lyw&usqp=CAU", "_id":1},
+//     {"name":"iphone14", "brand":"apple", "type":"phone", "price":"120000", "description": "red silicon" , "rating":"4.5", "photo":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkOB6IMj03xxd4kuAiGkHtwDYOtfLW1d6Lyw&usqp=CAU", "_id":2}
+// ]
+
 app.get('/', (req, res)=>{
     res.send('hello server asflkjf')
 })
+
+// app.get('/products', (req, res)=>{
+//     res.send(products)
+// })
 
 app.listen(port, () => {
     console.log(`running port on: ${port} ` )
