@@ -30,7 +30,10 @@ async function run() {
     await client.connect();
 
     const productCollection = client.db("productDB").collection("products");
+    const cartCollection = client.db("productDB").collection("cart");
 
+
+// ---- product collcetion crud operation
     app.get("/products", async (req, res) => {
       const cursor = productCollection.find();
       const result = await cursor.toArray();
@@ -50,6 +53,23 @@ async function run() {
       const result = await productCollection.insertOne(newProduct);
       res.send(result);
     });
+
+  //  ----cart collection crud operatioin
+  app.get("/cart", async (req, res) => {
+    const cursor = cartCollection.find();
+    const result = await cursor.toArray();
+    res.send(result);
+  });
+
+  app.post('/cart', async(req, res)=>{
+    const card = req.body;
+    const result = await cartCollection.insertOne(card);
+    res.send(result)
+  })
+
+
+
+
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
