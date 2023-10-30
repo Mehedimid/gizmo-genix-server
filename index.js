@@ -47,6 +47,26 @@ async function run() {
       res.send(result);
     });
 
+    app.put("/products/:id" , async(req, res)=>{
+      const id = req.params.id
+      const newProduct = req.body
+      const filter = {_id : new ObjectId(id)}
+      const options = { upsert: true };
+      const updateProduct = {
+        $set: {
+          name : newProduct.name,
+          brand : newProduct.brand,
+          price : newProduct.price,
+          rating : newProduct.rating,
+          description : newProduct.description,
+          type : newProduct.type,
+          photo : newProduct.photo,
+        },
+      };
+      const result = await productCollection.updateOne(filter, updateProduct, options);
+      res.send(result)
+    })
+
     app.post("/products", async (req, res) => {
       const newProduct = req.body;
       console.log(newProduct);
@@ -90,18 +110,11 @@ run().catch(console.dir);
 
 // =================================================================
 
-// const products = [
-//     {"name":"iphone13", "brand":"apple", "type":"phone", "price":"100000", "description": "black silicon" , "rating":"5", "photo":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkOB6IMj03xxd4kuAiGkHtwDYOtfLW1d6Lyw&usqp=CAU", "_id":1},
-//     {"name":"iphone14", "brand":"apple", "type":"phone", "price":"120000", "description": "red silicon" , "rating":"4.5", "photo":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkOB6IMj03xxd4kuAiGkHtwDYOtfLW1d6Lyw&usqp=CAU", "_id":2}
-// ]
+
 
 app.get("/", (req, res) => {
   res.send("hello server asflkjf");
 });
-
-// app.get('/products', (req, res)=>{
-//     res.send(products)
-// })
 
 app.listen(port, () => {
   console.log(`running port on: ${port} `);
