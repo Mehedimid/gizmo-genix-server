@@ -14,7 +14,7 @@ app.use(express.json());
 
 
 const uri =
-  `mongodb+srv://${process.env.DB_MUSER}:${process.env.DB_MPASS}@cluster0.virnuu4.mongodb.net/?retryWrites=true&w=majority`;
+  `mongodb+srv://mehedi117:Mha1381mHa@cluster0.virnuu4.mongodb.net/?retryWrites=true&w=majority`;
 
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
